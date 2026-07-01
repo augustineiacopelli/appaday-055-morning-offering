@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Morning Offering | AppADay 055</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-vigil:#1c1b33;
+    --vigil-violet:#4b3f72;
+    --dawn-rose:#e8927c;
+    --ember-gold:#f0b429;
+    --candle-flame:#ffd27a;
+    --chalk:#f7f3ed;
+    --chalk-dim:rgba(247,243,237,0.68);
+    --line:rgba(247,243,237,0.14);
+    --sky-a:var(--ink-vigil);
+    --sky-b:var(--vigil-violet);
+    --sun-glow:var(--candle-flame);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100dvh;
+    background:
+      radial-gradient(ellipse 120% 60% at 50% -10%, var(--sky-b) 0%, transparent 55%),
+      linear-gradient(180deg, var(--sky-a) 0%, #101022 100%);
+    background-color:var(--ink-vigil);
+    font-family:'Source Serif 4', Georgia, serif;
+    color:var(--chalk);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition:background 1.4s ease;
+    overflow-x:hidden;
+  }
+  .header{
+    width:100%;
+    max-width:640px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px 8px;
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--chalk-dim);
+  }
+  .header a{color:var(--chalk-dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px;}
+  .header a:hover{color:var(--chalk);border-color:var(--chalk-dim);}
+  .header .num{color:var(--candle-flame);font-weight:600;}
+
+  main{
+    width:100%;
+    max-width:640px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:8px 22px 40px;
+  }
+
+  .title-block{text-align:center;margin:6px 0 22px;}
+  h1{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-weight:600;
+    font-size:clamp(30px,7vw,42px);
+    margin:0 0 6px;
+    letter-spacing:0.01em;
+  }
+  .subtitle{
+    font-size:14px;
+    color:var(--chalk-dim);
+    font-style:italic;
+    max-width:44ch;
+    margin:0 auto;
+    line-height:1.5;
+  }
+
+  /* --- Sun / candle signature element --- */
+  .sun-wrap{position:relative;width:min(52vw,220px);height:min(52vw,220px);margin:10px 0 26px;}
+  .sun-ring{position:absolute;inset:0;transform:rotate(-90deg);}
+  .sun-ring circle{fill:none;stroke-width:3;}
+  .sun-ring .track{stroke:rgba(247,243,237,0.10);}
+  .sun-ring .prog{stroke:var(--candle-flame);stroke-linecap:round;transition:stroke-dashoffset 0.4s linear;}
+  .sun-core{
+    position:absolute;
+    inset:14%;
+    border-radius:50%;
+    background:radial-gradient(circle at 38% 32%, var(--sun-glow), transparent 70%),
+               radial-gradient(circle at 50% 50%, var(--sun-glow) 0%, rgba(255,210,122,0) 72%);
+    box-shadow:0 0 40px 6px rgba(255,210,122,0.35), inset 0 0 30px rgba(255,255,255,0.25);
+    transition:background 1s ease, box-shadow 1s ease, transform 0.6s ease;
+  }
+  .sun-core.breathe{animation:breathe 30s ease-in-out infinite;}
+  @keyframes breathe{
+    0%{transform:scale(0.86);}
+    50%{transform:scale(1.05);}
+    100%{transform:scale(0.86);}
+  }
+  .step-dots{position:absolute;inset:0;}
+  .step-dot{
+    position:absolute;width:7px;height:7px;border-radius:50%;
+    background:rgba(247,243,237,0.24);
+    transform:translate(-50%,-50%);
+    transition:background 0.4s ease, box-shadow 0.4s ease;
+  }
+  .step-dot.done{background:var(--candle-flame);box-shadow:0 0 8px var(--candle-flame);}
+  .step-dot.current{background:var(--chalk);box-shadow:0 0 10px var(--chalk);}
+
+  .step-eyebrow{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:11.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--dawn-rose);
+    margin-bottom:6px;
+  }
+  .step-title{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:clamp(22px,5.5vw,28px);
+    font-weight:600;
+    margin:0 0 14px;
+    text-align:center;
+  }
+
+  .card{
+    width:100%;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px 20px;
+    backdrop-filter:blur(6px);
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    justify-content:center;
+    gap:14px;
+  }
+
+  .prayer-text{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:clamp(17px,4.4vw,20px);
+    line-height:1.7;
+    color:var(--chalk-dim);
+  }
+  .prayer-text .clause{transition:color 0.6s ease, opacity 0.6s ease;opacity:0.4;}
+  .prayer-text .clause.lit{color:var(--chalk);opacity:1;}
+
+  .instruction{font-size:15.5px;line-height:1.7;color:var(--chalk-dim);max-width:38ch;}
+  .instruction strong{color:var(--chalk);font-weight:600;}
+
+  .field-group{width:100%;display:flex;flex-direction:column;gap:12px;text-align:left;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:11.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dawn-rose);}
+  .field input{
+    background:rgba(255,255,255,0.06);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:11px 13px;
+    color:var(--chalk);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:15px;
+  }
+  .field input::placeholder{color:rgba(247,243,237,0.35);}
+  .field input:focus{outline:none;border-color:var(--candle-flame);}
+
+  .date-line{font-size:13.5px;color:var(--chalk-dim);letter-spacing:0.02em;}
+  .virtue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;width:100%;}
+  @media (min-width:420px){.virtue-grid{grid-template-columns:repeat(3,1fr);}}
+  .virtue-btn{
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:11px 6px;
+    color:var(--chalk-dim);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:13px;
+    letter-spacing:0.02em;
+    cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .virtue-btn:hover{border-color:rgba(240,180,41,0.5);}
+  .virtue-btn.selected{
+    background:rgba(240,180,41,0.16);
+    border-color:var(--candle-flame);
+    color:var(--chalk);
+  }
+  .virtue-note{font-size:13px;color:var(--chalk-dim);font-style:italic;min-height:18px;}
+
+  .calendar-field{width:100%;text-align:left;}
+
+  /* Controls */
+  .timer-row{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:20px;font-size:12.5px;color:var(--chalk-dim);letter-spacing:0.04em;
+  }
+  .timer-row .dot-sep{opacity:0.4;}
+  .controls{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    margin-top:16px;width:100%;
+  }
+  button.nav{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:14px;
+    letter-spacing:0.03em;
+    padding:12px 20px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.05);
+    color:var(--chalk);
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  button.nav:hover{border-color:var(--candle-flame);}
+  button.nav.primary{
+    background:linear-gradient(135deg, var(--ember-gold), var(--dawn-rose));
+    color:#241608;
+    border:none;
+    font-weight:600;
+    flex:1;
+    max-width:220px;
+  }
+  button.nav.ghost{background:transparent;}
+  button.nav:disabled{opacity:0.3;cursor:default;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(255,255,255,0.05);color:var(--chalk-dim);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:14px;
+    flex-shrink:0;
+  }
+  .icon-btn:hover{color:var(--chalk);border-color:var(--candle-flame);}
+
+  .toggle-row{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:14px;font-size:12px;color:var(--chalk-dim);}
+  .switch{position:relative;width:34px;height:19px;border-radius:999px;background:rgba(255,255,255,0.14);cursor:pointer;transition:background 0.25s ease;flex-shrink:0;}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:var(--chalk);transition:transform 0.25s ease;}
+  .switch.on{background:var(--ember-gold);}
+  .switch.on::after{transform:translateX(15px);}
+
+  /* Completion */
+  .complete-wrap{width:100%;text-align:center;}
+  .streak-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(240,180,41,0.12);border:1px solid rgba(240,180,41,0.4);
+    border-radius:999px;padding:8px 16px;margin:8px 0 20px;
+    font-size:13px;color:var(--candle-flame);letter-spacing:0.03em;
+  }
+  .summary-card{text-align:left;}
+  .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;}
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row .k{color:var(--chalk-dim);letter-spacing:0.02em;}
+  .summary-row .v{color:var(--chalk);text-align:right;font-family:'Cormorant Garamond', Georgia, serif;font-size:16px;}
+
+  .history-toggle{
+    margin-top:18px;background:none;border:none;color:var(--dawn-rose);
+    font-family:'Source Serif 4', Georgia, serif;font-size:13px;cursor:pointer;
+    text-decoration:underline;text-underline-offset:3px;
+  }
+  .history-list{width:100%;margin-top:14px;display:none;flex-direction:column;gap:6px;}
+  .history-list.open{display:flex;}
+  .history-item{display:flex;justify-content:space-between;font-size:12.5px;color:var(--chalk-dim);padding:6px 2px;border-bottom:1px dashed var(--line);}
+  .history-item span:last-child{color:var(--chalk);}
+
+  footer{
+    text-align:center;padding:18px 20px 30px;font-size:11.5px;color:var(--chalk-dim);
+    letter-spacing:0.03em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .sun-core.breathe{animation:none;}
+    *{transition-duration:0.01ms !important;}
+  }
+
+  /* Virtue modal */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(10,9,20,0.72);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:center;justify-content:center;
+    padding:24px;
+    z-index:50;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-card{
+    width:100%;max-width:420px;
+    background:linear-gradient(180deg, rgba(75,63,114,0.4), rgba(28,27,51,0.92));
+    border:1px solid rgba(255,210,122,0.28);
+    border-radius:20px;
+    padding:26px 24px 22px;
+    box-shadow:0 24px 60px rgba(0,0,0,0.45);
+    position:relative;
+    text-align:left;
+  }
+  .modal-close{
+    position:absolute;top:14px;right:14px;
+    width:32px;height:32px;border-radius:50%;
+    background:rgba(255,255,255,0.06);border:1px solid var(--line);
+    color:var(--chalk-dim);font-size:15px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{color:var(--chalk);border-color:var(--candle-flame);}
+  .modal-eyebrow{
+    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--dawn-rose);margin-bottom:6px;
+  }
+  .modal-title{
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:28px;font-weight:600;margin:0 0 14px;
+  }
+  .modal-body{font-size:15px;line-height:1.7;color:var(--chalk-dim);margin-bottom:16px;}
+  .modal-practice{
+    background:rgba(240,180,41,0.1);
+    border-left:2px solid var(--candle-flame);
+    padding:12px 14px;border-radius:4px;
+    font-size:13.5px;line-height:1.6;color:var(--chalk);
+    font-style:italic;
+    margin-bottom:18px;
+  }
+  .modal-actions{display:flex;justify-content:flex-end;}
+  .modal-choose{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:13.5px;padding:9px 18px;border-radius:999px;
+    background:linear-gradient(135deg, var(--ember-gold), var(--dawn-rose));
+    color:#241608;border:none;font-weight:600;cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span><span class="num">055</span> &middot; Morning Offering</span>
+  <a href="https://augustineiacopelli.github.io/appaday/">AppADay</a>
+</div>
+
+<main>
+  <div class="title-block">
+    <h1>Morning Offering</h1>
+    <p class="subtitle">Begin the day in God's presence and align your work to your vocation.</p>
+  </div>
+
+  <div class="sun-wrap">
+    <svg class="sun-ring" viewBox="0 0 220 220">
+      <circle class="track" cx="110" cy="110" r="98"></circle>
+      <circle class="prog" id="ringProg" cx="110" cy="110" r="98"></circle>
+    </svg>
+    <div class="sun-core" id="sunCore"></div>
+    <div class="step-dots" id="stepDots"></div>
+  </div>
+
+  <div id="stepArea" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
+
+  <div class="timer-row" id="timerRow"></div>
+
+  <div class="controls" id="controlsRow"></div>
+
+  <div class="toggle-row">
+    <span>Auto-advance</span>
+    <div class="switch on" id="autoSwitch"></div>
+  </div>
+</main>
+
+<div class="modal-overlay" id="virtueModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose" title="Close">&times;</button>
+    <div class="modal-eyebrow">Virtue for Today</div>
+    <h3 class="modal-title" id="modalTitle"></h3>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-practice" id="modalPractice"></div>
+    <div class="modal-actions">
+      <button class="modal-choose" id="modalChoose">Choose This Virtue</button>
+    </div>
+  </div>
+</div>
+
+<footer>St. John Paul II, pray for me. &middot; AppADay 055</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORAGE_KEY = "morningOffering_v1";
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveState(obj){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }catch(e){}
+  }
+
+  var store = loadState();
+  if(!store.intentions) store.intentions = { family:"", team:"", person:"" };
+  if(!store.history) store.history = [];
+  if(!store.streak) store.streak = 0;
+  if(!store.lastCompleted) store.lastCompleted = null;
+
+  function todayKey(d){
+    d = d || new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function dayName(d){
+    return d.toLocaleDateString(undefined, { weekday:"long", month:"long", day:"numeric" });
+  }
+
+  var VIRTUES = [
+    { name:"Faith", note:"See today through trust in what God has revealed.",
+      full:"Faith is trusting what God has revealed, even when the full picture is not visible. It is not a feeling you conjure up but a settled confidence that God is present and at work in the ordinary shape of the day ahead, in the meetings, the interruptions, and the people you did not choose to be with.",
+      practice:"Today, when a decision comes with incomplete information, hand the uncertainty to trust rather than to anxiety." },
+    { name:"Hope", note:"Carry today's work toward a good you cannot yet see.",
+      full:"Hope carries today's work toward a good that has not yet arrived. It is what keeps effort from collapsing into either despair or presumption, holding steady in the space between what is asked of you now and what God is bringing about over a longer arc than you can see from inside one day.",
+      practice:"When something feels stalled or thankless today, do it anyway as an act of hope, not a bet on an immediate result." },
+    { name:"Charity", note:"Let love of God and neighbor shape every choice.",
+      full:"Charity is love of God and neighbor ordered above every other motive. It asks that the people in front of you today, family, colleagues, students, strangers, are treated as ends in themselves and not as obstacles or instruments on the way to your own agenda.",
+      practice:"Pick one person you expect to find difficult today and extend them one deliberate kindness before you judge their behavior." },
+    { name:"Prudence", note:"Choose the wise next step, not just the easy one.",
+      full:"Prudence is the virtue of seeing situations clearly and choosing the right means to a good end. It governs the other virtues by asking not just what is good in the abstract, but what the good and wise action actually is, here, today, given the real constraints in front of you.",
+      practice:"Before your first difficult decision today, pause for one breath and ask what a wise person, not just a busy one, would do." },
+    { name:"Justice", note:"Give each person and task what is rightly due.",
+      full:"Justice gives each person and each task what is rightly due to them. It resists the pull to shortchange the quiet obligations, an overdue reply, a promise half-kept, in favor of whatever is loudest, and it treats fairness toward others as a debt rather than a preference.",
+      practice:"Look at what you owe someone today, an answer, credit, an apology, and pay it rather than postpone it again." },
+    { name:"Fortitude", note:"Stay steady through whatever today asks of you.",
+      full:"Fortitude is the strength to stay steady through difficulty without either fleeing it or being reckless with it. It is what lets you finish the hard conversation, sit with the discomfort of a real problem, and keep showing up when the easier path would be to disengage.",
+      practice:"Name the one thing today you are tempted to avoid, and do that thing first, not last." },
+    { name:"Temperance", note:"Keep your wants in right order today.",
+      full:"Temperance keeps appetites and wants in right order rather than letting the loudest impulse run the day. It is not the suppression of desire but its right proportion, food, attention, speed, comfort, so that lesser goods do not crowd out what matters most.",
+      practice:"Notice the first small indulgence you reach for out of habit today, and choose moderation there before anything larger." }
+  ];
+
+  var selectedVirtue = store.lastVirtue || null;
+  var calendarNote = "";
+
+  var PRAYER_CLAUSES = [
+    "O Jesus, through the Immaculate Heart of Mary,",
+    "I offer You my prayers, works, joys, and sufferings of this day",
+    "for all the intentions of Your Sacred Heart,",
+    "in union with the Holy Sacrifice of the Mass throughout the world,",
+    "in reparation for my sins, for the intentions of all our associates,",
+    "and in particular for the intentions of the Holy Father this month."
+  ];
+
+  var STEPS = [
+    { key:"posture", eyebrow:"One", title:"Posture & Silence", duration:30 },
+    { key:"offer", eyebrow:"Two", title:"Offer", duration:60 },
+    { key:"intentions", eyebrow:"Three", title:"Intentions", duration:60 },
+    { key:"preview", eyebrow:"Four", title:"Preview", duration:60 },
+    { key:"close", eyebrow:"Five", title:"Close", duration:30 }
+  ];
+
+  var current = 0;
+  var timeLeft = STEPS[0].duration;
+  var running = false;
+  var autoAdvance = true;
+  var tickHandle = null;
+  var completed = false;
+
+  var stepArea = document.getElementById("stepArea");
+  var timerRow = document.getElementById("timerRow");
+  var controlsRow = document.getElementById("controlsRow");
+  var sunCore = document.getElementById("sunCore");
+  var ringProg = document.getElementById("ringProg");
+  var stepDots = document.getElementById("stepDots");
+  var autoSwitch = document.getElementById("autoSwitch");
+  var virtueModal = document.getElementById("virtueModal");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalBody = document.getElementById("modalBody");
+  var modalPractice = document.getElementById("modalPractice");
+  var modalClose = document.getElementById("modalClose");
+  var modalChoose = document.getElementById("modalChoose");
+
+  var RING_CIRC = 2 * Math.PI * 98;
+  ringProg.style.strokeDasharray = RING_CIRC;
+
+  var SKY_STOPS = [
+    { a:"#1c1b33", b:"#4b3f72", sun:"#8f7fd6" },
+    { a:"#2c2650", b:"#6a4d8f", sun:"#e8927c" },
+    { a:"#4a3560", b:"#c06a5e", sun:"#e8927c" },
+    { a:"#6e4a4e", b:"#e8927c", sun:"#f0b429" },
+    { a:"#a9683f", b:"#f0b429", sun:"#ffd27a" }
+  ];
+
+  function layoutDots(){
+    stepDots.innerHTML = "";
+    var n = STEPS.length;
+    for(var i=0;i<n;i++){
+      var angle = (-90 + (360/n)*i) * Math.PI/180;
+      var r = 108;
+      var x = 110 + r*Math.cos(angle);
+      var y = 110 + r*Math.sin(angle);
+      var d = document.createElement("div");
+      d.className = "step-dot";
+      d.style.left = (x/220*100) + "%";
+      d.style.top = (y/220*100) + "%";
+      d.dataset.idx = i;
+      stepDots.appendChild(d);
+    }
+  }
+  layoutDots();
+
+  function applySky(idx, frac){
+    var stop = SKY_STOPS[idx];
+    document.documentElement.style.setProperty("--sky-a", stop.a);
+    document.documentElement.style.setProperty("--sky-b", stop.b);
+    document.documentElement.style.setProperty("--sun-glow", stop.sun);
+    document.body.style.background =
+      "radial-gradient(ellipse 120% 60% at 50% -10%, " + stop.b + " 0%, transparent 55%), linear-gradient(180deg, " + stop.a + " 0%, #101022 100%)";
+  }
+
+  function updateDots(){
+    var dots = stepDots.querySelectorAll(".step-dot");
+    dots.forEach(function(d){
+      var i = parseInt(d.dataset.idx,10);
+      d.classList.remove("done","current");
+      if(i < current) d.classList.add("done");
+      else if(i === current) d.classList.add("current");
+    });
+  }
+
+  function updateRing(){
+    var step = STEPS[current];
+    var frac = 1 - (timeLeft / step.duration);
+    var offset = RING_CIRC * (1 - frac);
+    ringProg.style.strokeDashoffset = offset;
+  }
+
+  function formatTime(s){
+    var m = Math.floor(s/60);
+    var sec = s % 60;
+    return m + ":" + String(sec).padStart(2,"0");
+  }
+
+  function stopTicking(){
+    if(tickHandle){ clearInterval(tickHandle); tickHandle = null; }
+    running = false;
+  }
+
+  function startTicking(){
+    if(completed) return;
+    stopTicking();
+    running = true;
+    renderControls();
+    tickHandle = setInterval(function(){
+      timeLeft -= 1;
+      if(timeLeft <= 0){
+        timeLeft = 0;
+        updateRing();
+        renderTimer();
+        stopTicking();
+        if(autoAdvance){
+          setTimeout(function(){ goNext(); }, 500);
+        }
+        return;
+      }
+      updateRing();
+      renderTimer();
+      if(STEPS[current].key === "offer") updateOfferHighlight();
+    }, 1000);
+  }
+
+  function renderTimer(){
+    var step = STEPS[current];
+    timerRow.innerHTML =
+      '<span>' + formatTime(timeLeft) + ' remaining</span>' +
+      '<span class="dot-sep">&middot;</span>' +
+      '<span>Step ' + (current+1) + ' of ' + STEPS.length + '</span>';
+  }
+
+  function updateOfferHighlight(){
+    var step = STEPS[current];
+    var frac = 1 - (timeLeft / step.duration);
+    var idx = Math.min(PRAYER_CLAUSES.length - 1, Math.floor(frac * PRAYER_CLAUSES.length));
+    var els = stepArea.querySelectorAll(".clause");
+    els.forEach(function(el,i){
+      el.classList.toggle("lit", i <= idx);
+    });
+  }
+
+  function renderControls(){
+    controlsRow.innerHTML = "";
+
+    var back = document.createElement("button");
+    back.className = "icon-btn";
+    back.innerHTML = "&#8249;";
+    back.title = "Previous step";
+    back.disabled = current === 0;
+    back.onclick = function(){ goPrev(); };
+    controlsRow.appendChild(back);
+
+    var playPause = document.createElement("button");
+    playPause.className = "nav primary";
+    playPause.textContent = running ? "Pause" : (timeLeft === STEPS[current].duration ? "Begin" : "Resume");
+    playPause.onclick = function(){
+      if(running){ stopTicking(); renderControls(); }
+      else { startTicking(); renderControls(); }
+    };
+    controlsRow.appendChild(playPause);
+
+    var next = document.createElement("button");
+    next.className = "icon-btn";
+    next.innerHTML = "&#8250;";
+    next.title = "Next step";
+    next.onclick = function(){ goNext(); };
+    controlsRow.appendChild(next);
+  }
+
+  function renderStep(){
+    var step = STEPS[current];
+    applySky(current);
+    sunCore.classList.toggle("breathe", step.key === "posture");
+    updateDots();
+    updateRing();
+    renderTimer();
+    renderControls();
+
+    var html = '<div class="step-eyebrow">' + step.eyebrow + '</div>';
+    html += '<h2 class="step-title">' + step.title + '</h2>';
+    html += '<div class="card">';
+
+    if(step.key === "posture"){
+      html += '<div class="instruction"><strong>Sign of the Cross.</strong><br>One slow breath. Let your body arrive before your mind does.</div>';
+    }
+    else if(step.key === "offer"){
+      html += '<div class="prayer-text">';
+      PRAYER_CLAUSES.forEach(function(c,i){
+        html += '<span class="clause' + (i===0?' lit':'') + '">' + c + ' </span>';
+      });
+      html += '</div>';
+    }
+    else if(step.key === "intentions"){
+      html += '<div class="field-group">';
+      html += '<div class="field"><label>Family</label><input type="text" id="inpFamily" placeholder="Name who is on your heart" value="' + escapeAttr(store.intentions.family) + '"></div>';
+      html += '<div class="field"><label>Team</label><input type="text" id="inpTeam" placeholder="Name your team or colleagues" value="' + escapeAttr(store.intentions.team) + '"></div>';
+      html += '<div class="field"><label>One student or colleague</label><input type="text" id="inpPerson" placeholder="Name one person by name" value="' + escapeAttr(store.intentions.person) + '"></div>';
+      html += '</div>';
+    }
+    else if(step.key === "preview"){
+      html += '<div class="date-line">' + dayName(new Date()) + '</div>';
+      html += '<div class="calendar-field field"><label>Glance: one thing on today\'s calendar</label><input type="text" id="inpCalendar" placeholder="What is the day\'s shape?" value="' + escapeAttr(calendarNote) + '"></div>';
+      html += '<div class="field"><label>Choose one virtue to practice</label></div>';
+      html += '<div class="virtue-grid" id="virtueGrid"></div>';
+      html += '<div class="virtue-note" id="virtueNote">' + (selectedVirtue ? VIRTUES.find(function(v){return v.name===selectedVirtue;}).note : 'Faith, Hope, Charity, Prudence, Justice, Fortitude, Temperance') + '</div>';
+    }
+    else if(step.key === "close"){
+      html += '<div class="instruction"><strong>St. John Paul II, pray for me.</strong><br>Sign of the Cross. Carry today\'s virtue with you: <strong>' + (selectedVirtue || "your chosen virtue") + '</strong>.</div>';
+    }
+
+    html += '</div>';
+    stepArea.innerHTML = html;
+
+    if(step.key === "intentions"){
+      ["inpFamily","inpTeam","inpPerson"].forEach(function(id, i){
+        var el = document.getElementById(id);
+        var field = ["family","team","person"][i];
+        el.addEventListener("input", function(){
+          store.intentions[field] = el.value;
+          saveState(store);
+        });
+      });
+    }
+    if(step.key === "preview"){
+      var grid = document.getElementById("virtueGrid");
+      VIRTUES.forEach(function(v){
+        var b = document.createElement("button");
+        b.className = "virtue-btn" + (selectedVirtue === v.name ? " selected" : "");
+        b.textContent = v.name;
+        b.onclick = function(){
+          openVirtueModal(v.name);
+        };
+        grid.appendChild(b);
+      });
+      var calInput = document.getElementById("inpCalendar");
+      calInput.addEventListener("input", function(){ calendarNote = calInput.value; });
+    }
+  }
+
+  function escapeAttr(s){
+    if(!s) return "";
+    return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+  }
+
+  function goNext(){
+    if(current < STEPS.length - 1){
+      current += 1;
+      timeLeft = STEPS[current].duration;
+      stopTicking();
+      renderStep();
+      startTicking();
+    } else {
+      finishFlow();
+    }
+  }
+
+  function goPrev(){
+    if(current > 0){
+      current -= 1;
+      timeLeft = STEPS[current].duration;
+      stopTicking();
+      renderStep();
+    }
+  }
+
+  var pendingVirtue = null;
+
+  function findVirtue(name){
+    return VIRTUES.find(function(v){ return v.name === name; });
+  }
+
+  function openVirtueModal(name){
+    var v = findVirtue(name);
+    pendingVirtue = name;
+    modalTitle.textContent = v.name;
+    modalBody.textContent = v.full;
+    modalPractice.textContent = v.practice;
+    virtueModal.classList.add("open");
+  }
+
+  function closeVirtueModal(){
+    virtueModal.classList.remove("open");
+    pendingVirtue = null;
+  }
+
+  modalClose.addEventListener("click", closeVirtueModal);
+  virtueModal.addEventListener("click", function(e){
+    if(e.target === virtueModal) closeVirtueModal();
+  });
+  modalChoose.addEventListener("click", function(){
+    if(pendingVirtue){
+      selectedVirtue = pendingVirtue;
+      var grid = document.getElementById("virtueGrid");
+      if(grid){
+        grid.querySelectorAll(".virtue-btn").forEach(function(x){
+          x.classList.toggle("selected", x.textContent === selectedVirtue);
+        });
+      }
+      var noteEl = document.getElementById("virtueNote");
+      if(noteEl) noteEl.textContent = findVirtue(selectedVirtue).note;
+    }
+    closeVirtueModal();
+  });
+
+  autoSwitch.addEventListener("click", function(){
+    autoAdvance = !autoAdvance;
+    autoSwitch.classList.toggle("on", autoAdvance);
+  });
+
+  function computeStreak(){
+    var today = todayKey();
+    var yest = todayKey(new Date(Date.now() - 86400000));
+    if(store.lastCompleted === today){
+      // already counted today
+    } else if(store.lastCompleted === yest){
+      store.streak = (store.streak || 0) + 1;
+      store.lastCompleted = today;
+    } else {
+      store.streak = 1;
+      store.lastCompleted = today;
+    }
+  }
+
+  function finishFlow(){
+    stopTicking();
+    completed = true;
+    if(!selectedVirtue) selectedVirtue = "Charity";
+    store.lastVirtue = selectedVirtue;
+    computeStreak();
+
+    var entry = {
+      date: todayKey(),
+      virtue: selectedVirtue,
+      family: store.intentions.family,
+      team: store.intentions.team,
+      person: store.intentions.person
+    };
+    store.history = store.history.filter(function(h){ return h.date !== entry.date; });
+    store.history.unshift(entry);
+    store.history = store.history.slice(0, 30);
+    saveState(store);
+
+    applySky(4);
+    sunCore.classList.remove("breathe");
+    sunCore.style.boxShadow = "0 0 60px 14px rgba(255,210,122,0.55), inset 0 0 40px rgba(255,255,255,0.4)";
+    updateDots();
+    stepDots.querySelectorAll(".step-dot").forEach(function(d){ d.classList.add("done"); d.classList.remove("current"); });
+    ringProg.style.strokeDashoffset = 0;
+    timerRow.innerHTML = "";
+
+    var html = '<div class="complete-wrap">';
+    html += '<div class="step-eyebrow">Amen</div>';
+    html += '<h2 class="step-title">Offering Made</h2>';
+    html += '<div class="streak-badge">' + store.streak + '-day streak of morning offerings</div>';
+    html += '<div class="card summary-card">';
+    html += rowHTML("Virtue for today", entry.virtue);
+    if(entry.family) html += rowHTML("Family", entry.family);
+    if(entry.team) html += rowHTML("Team", entry.team);
+    if(entry.person) html += rowHTML("Named by name", entry.person);
+    html += '</div>';
+    html += '<button class="history-toggle" id="histToggle">View past offerings</button>';
+    html += '<div class="history-list" id="histList"></div>';
+    html += '</div>';
+    stepArea.innerHTML = html;
+
+    var histToggle = document.getElementById("histToggle");
+    var histList = document.getElementById("histList");
+    histToggle.onclick = function(){
+      histList.classList.toggle("open");
+      if(histList.classList.contains("open")){
+        histList.innerHTML = store.history.map(function(h){
+          return '<div class="history-item"><span>' + h.date + '</span><span>' + h.virtue + '</span></div>';
+        }).join("");
+        histToggle.textContent = "Hide past offerings";
+      } else {
+        histToggle.textContent = "View past offerings";
+      }
+    };
+
+    controlsRow.innerHTML = "";
+    var again = document.createElement("button");
+    again.className = "nav primary";
+    again.textContent = "Begin Again";
+    again.style.maxWidth = "260px";
+    again.onclick = function(){ restart(); };
+    controlsRow.appendChild(again);
+  }
+
+  function rowHTML(k,v){
+    return '<div class="summary-row"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+  }
+
+  function restart(){
+    completed = false;
+    current = 0;
+    timeLeft = STEPS[0].duration;
+    selectedVirtue = store.lastVirtue || null;
+    sunCore.style.boxShadow = "";
+    renderStep();
+  }
+
+  renderStep();
+})();
+</script>
+</body>
+</html>
